@@ -225,6 +225,4 @@ ORDER BY mes;
 
 ---
 
-# 👍 Pronto!
 
-Agora você pode baixar ou clonar este repositório e praticar SQL em qualquer ambiente.
