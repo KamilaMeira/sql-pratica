@@ -1,0 +1,55 @@
+*/relatorio_pedidos_acima_media*/
+
+SELECT
+    c.nome,
+    p.id AS pedido,
+    p.valor
+FROM pedidos p
+JOIN clientes c ON c.id = p.cliente_id
+WHERE p.valor > (
+    SELECT AVG(valor)
+    FROM pedidos p2
+    WHERE p2.cliente_id = p.cliente_id
+);
+
+*/relatorio_top_clientes*/
+SELECT 
+    c.nome,
+    COUNT(p.id) AS qtd_pedidos,
+    SUM(p.valor) AS total
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+GROUP BY c.id
+ORDER BY total DESC
+LIMIT 5;
+
+*/relatorio_total_por_cliente*/
+SELECT 
+    c.nome,
+    SUM(p.valor) AS total_gasto
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+GROUP BY c.id
+ORDER BY total_gasto DESC;
+
+*/relatorio_vendas_mensais*/
+
+WITH por_mes AS (
+    SELECT 
+        strftime('%Y-%m', data) AS mes,
+        SUM(valor) AS total_mes
+    FROM pedidos
+    GROUP BY mes
+)
+SELECT *
+FROM por_mes
+ORDER BY mes;
+
+*/relatorio_vendas_por_cidade*/
+SELECT 
+    c.cidade,
+    SUM(p.valor) AS total_vendas
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+GROUP BY c.cidade
+ORDER BY total_vendas DESC;

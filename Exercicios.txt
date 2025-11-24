@@ -1,0 +1,57 @@
+01_select_where
+-- Pedidos maiores que 200
+SELECT *
+FROM pedidos
+WHERE valor > 200;
+
+-- Clientes da cidade de São Paulo
+SELECT *
+FROM clientes
+WHERE cidade = 'São Paulo';
+
+02_joins
+-- INNER JOIN: pedidos com nomes dos clientes
+SELECT 
+    p.id AS pedido,
+    c.nome AS cliente,
+    p.valor
+FROM pedidos p
+INNER JOIN clientes c ON c.id = p.cliente_id;
+
+-- LEFT JOIN: clientes sem pedidos
+SELECT 
+    c.nome,
+    p.id AS pedido
+FROM clientes c
+LEFT JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.id IS NULL;
+
+03_group_by
+-- Total de pedidos por cliente
+SELECT 
+    c.nome,
+    SUM(p.valor) AS total_gasto
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+GROUP BY c.id
+ORDER BY total_gasto DESC;
+
+04_order_by
+-- Top 3 pedidos
+SELECT *
+FROM pedidos
+ORDER BY valor DESC
+LIMIT 3;
+
+05_subqueries
+-- Clientes com compras acima da média geral
+SELECT 
+    c.nome,
+    SUM(p.valor) AS total_cliente
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+GROUP BY c.id
+HAVING total_cliente > (
+    SELECT AVG(valor) FROM pedidos
+);
+
